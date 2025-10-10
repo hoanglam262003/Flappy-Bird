@@ -14,4 +14,6 @@ public class GameAssets : MonoBehaviour
     }
 
     public Sprite pipeHead;
+    public Transform pipeHeadPrefab;
+    public Transform pipeBodyPrefab;
 }
