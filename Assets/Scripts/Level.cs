@@ -1,9 +1,10 @@
-using NUnit.Framework;
+using CodeMonkey;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Level : MonoBehaviour
 {
+    [SerializeField] private GameOverWindow gameOverWindow;
     private const float CAMERA_ORTHO_SIZE = 50f;
     private const float PIPE_WIDTH = 10f;
     private const float PIPE_HEAD_HEIGHT = 4f;
@@ -25,6 +26,14 @@ public class Level : MonoBehaviour
     private float pipeSpawnTimeMax;
     private float gapSize;
     private int pipesSpawned;
+    private State state;
+    private enum State
+    {
+        WaitingToStart,
+        Playing,
+        BirdDead
+    }
+
     public enum Difficulty
     {
         Easy,
@@ -38,17 +47,35 @@ public class Level : MonoBehaviour
         instance = this;
         pipeList = new List<Pipe>();
         SetDifficulty(Difficulty.Easy);
+        state = State.WaitingToStart;
     }
 
     private void Start()
     {
-        //CreateGapPipe(50f, 40f, 0f);
+        Bird.GetInstance().Died += Bird_Died;
+        Bird.GetInstance().StartedPlaying += Bird_StartedPlaying;
+    }
+
+    private void Bird_StartedPlaying(object sender, System.EventArgs e)
+    {
+        state = State.Playing;
+    }
+
+    private void Bird_Died(object sender, System.EventArgs e)
+    {
+        CMDebug.TextPopupMouse("Dead!");
+        state = State.BirdDead;
+        int finalScore = GetScore();
+        gameOverWindow.Show(finalScore);
     }
 
     private void Update()
     {
-        PipeMovement();
-        pipeSpawn();
+        if (state == State.Playing)
+        {
+            PipeMovement();
+            pipeSpawn();
+        }
     }
 
     private void PipeMovement()
