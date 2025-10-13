@@ -34,7 +34,7 @@ public class Bird : MonoBehaviour
         switch (state)
         {
             case State.WaitingToStart:
-                if (Keyboard.current.spaceKey.isPressed || Mouse.current.leftButton.isPressed)
+                if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 {
                     state = State.Playing;
                     rb.bodyType = RigidbodyType2D.Dynamic;
@@ -43,7 +43,7 @@ public class Bird : MonoBehaviour
                 }
                 break;
             case State.Playing:
-                if (Keyboard.current.spaceKey.isPressed || Mouse.current.leftButton.isPressed)
+                if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 {
                     Jump();
                 }
@@ -57,12 +57,14 @@ public class Bird : MonoBehaviour
     {
         if (state != State.Playing) return;
         rb.linearVelocity = Vector2.up * JUMP_FORCE;
+        SoundManager.PlaySound(SoundManager.Sound.BirdJump);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         state = State.Dead;
         rb.bodyType = RigidbodyType2D.Static;
+        SoundManager.PlaySound(SoundManager.Sound.Lose);
         if (Died != null) Died(this, EventArgs.Empty);
     }
 }

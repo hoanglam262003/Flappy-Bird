@@ -1,4 +1,3 @@
-using CodeMonkey;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -63,7 +62,6 @@ public class Level : MonoBehaviour
 
     private void Bird_Died(object sender, System.EventArgs e)
     {
-        CMDebug.TextPopupMouse("Dead!");
         state = State.BirdDead;
         int finalScore = GetScore();
         gameOverWindow.Show(finalScore);
@@ -88,6 +86,7 @@ public class Level : MonoBehaviour
             if (isTheRightOfBird && pipe.GetXPosition() <= BIRD_X_POSITION)
             {
                 pipesPassedCount++;
+                SoundManager.PlaySound(SoundManager.Sound.Score);
             }
             if (pipe.GetXPosition() < PIPE_DESTROY_X_POSITION)
             {
