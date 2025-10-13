@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameAssets : MonoBehaviour
@@ -16,4 +17,13 @@ public class GameAssets : MonoBehaviour
     public Sprite pipeHead;
     public Transform pipeHeadPrefab;
     public Transform pipeBodyPrefab;
+
+    public SoundAudioClip[] soundAudioClipArray;
+
+    [Serializable]
+    public class SoundAudioClip
+    {
+        public AudioClip audioClip;
+        public SoundManager.Sound sound;
+    }
 }

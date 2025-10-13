@@ -1,5 +1,3 @@
-using CodeMonkey.Utils;
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,12 +9,22 @@ public class GameOverWindow : MonoBehaviour
     [SerializeField]
     private Button retryButton;
 
+    [SerializeField]
+    private Button mainMenuButton;
+
     private void Awake()
     {
         retryButton.onClick.AddListener(() =>
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("SampleScene");
+            Loader.Load(Loader.Scene.SampleScene);
         });
+        retryButton.AddButtonSounds();
+
+        mainMenuButton.onClick.AddListener(() =>
+        {
+            Loader.Load(Loader.Scene.MainMenu);
+        });
+        mainMenuButton.AddButtonSounds();
         Hide();
     }
 
