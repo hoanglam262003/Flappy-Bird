@@ -11,11 +11,11 @@ public class MainMenu : MonoBehaviour
         {
             Loader.Load(Loader.Scene.SampleScene);
         });
-        //playButton.AddButtonSounds();
+        playButton.AddButtonSounds();
         quitButton.onClick.AddListener(() =>
         {
             Application.Quit();
         });
-        //quitButton.AddButtonSounds();
+        quitButton.AddButtonSounds();
     }
 }
