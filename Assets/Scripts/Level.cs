@@ -10,6 +10,7 @@ public class Level : MonoBehaviour
     private const float PIPE_MOVE_SPEED = 30f;
     private const float PIPE_DESTROY_X_POSITION = -100f;
     private const float PIPE_SPAWN_X_POSITION = 100f;
+    private const float GROUND_DESTROY_X_POSITION = -200f;
     private const float BIRD_X_POSITION = 0f;
 
     private static Level instance;
@@ -19,6 +20,7 @@ public class Level : MonoBehaviour
         return instance;
     }
 
+    private List<Transform> groundList;
     private List<Pipe> pipeList;
     private int pipesPassedCount;
     private float pipeSpawnTime;
@@ -44,6 +46,7 @@ public class Level : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        SpawnInitialGround();
         pipeList = new List<Pipe>();
         SetDifficulty(Difficulty.Easy);
         state = State.WaitingToStart;
@@ -64,6 +67,7 @@ public class Level : MonoBehaviour
     {
         state = State.BirdDead;
         int finalScore = GetScore();
+        gameOverWindow.NewHighScore();
         gameOverWindow.Show(finalScore);
     }
 
@@ -73,6 +77,43 @@ public class Level : MonoBehaviour
         {
             PipeMovement();
             pipeSpawn();
+            Ground();
+        }
+    }
+
+    private void SpawnInitialGround()
+    {
+        groundList = new List<Transform>();
+        Transform ground;
+        float groundY = -46f;
+        float groundWidth = 183f;
+        ground = Instantiate(GameAssets.GetInstance().ground, new Vector3(0, groundY, 0), Quaternion.identity);
+        groundList.Add(ground);
+        ground = Instantiate(GameAssets.GetInstance().ground, new Vector3(groundWidth, groundY, 0), Quaternion.identity);
+        groundList.Add(ground);
+        ground = Instantiate(GameAssets.GetInstance().ground, new Vector3(groundWidth * 2f, groundY, 0), Quaternion.identity);
+        groundList.Add(ground);
+    }
+
+    private void Ground()
+    {
+        foreach (Transform ground in groundList)
+        {
+            ground.position += new Vector3(-1f, 0f, 0f) * PIPE_MOVE_SPEED * Time.deltaTime;
+
+            if (ground.position.x < GROUND_DESTROY_X_POSITION)
+            {
+                float rightMostXPosition = -100f;
+                for (int i = 0; i < groundList.Count; i++)
+                {
+                    if (groundList[i].position.x > rightMostXPosition)
+                    {
+                        rightMostXPosition = groundList[i].position.x;
+                    }
+                }
+                float groundWidth = 183f;
+                ground.position = new Vector3(rightMostXPosition + groundWidth, ground.position.y, ground.position.z);
+            }          
         }
     }
 
