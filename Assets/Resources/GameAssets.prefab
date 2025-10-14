@@ -47,6 +47,7 @@ MonoBehaviour:
   pipeHead: {fileID: 21300000, guid: 165625e1f34d18e419d1c11d5ac1e5c6, type: 3}
   pipeHeadPrefab: {fileID: 8423547011109358365, guid: 7cf2e53849680be42ac3e26227524424, type: 3}
   pipeBodyPrefab: {fileID: 942861482637103799, guid: 58a269ecfd8216e458cc92f159326946, type: 3}
+  ground: {fileID: 7989998045256847351, guid: 0e5a774ad0c573b47ab66083d8c2d2de, type: 3}
   soundAudioClipArray:
   - audioClip: {fileID: 8300000, guid: 98180c6e462e607418d56d13fd9ec3ca, type: 3}
     sound: 0

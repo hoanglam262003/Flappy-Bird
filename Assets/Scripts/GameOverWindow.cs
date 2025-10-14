@@ -7,6 +7,9 @@ public class GameOverWindow : MonoBehaviour
     private Text scoreText;
 
     [SerializeField]
+    private Text highScoreText;
+
+    [SerializeField]
     private Button retryButton;
 
     [SerializeField]
@@ -37,5 +40,17 @@ public class GameOverWindow : MonoBehaviour
     {
         scoreText.text = score.ToString();
         gameObject.SetActive(true);
+    }
+
+    public void NewHighScore()
+    {
+        if (Level.GetInstance().GetScore() >= HighScore.GetHighScore())
+        {
+            highScoreText.text = "NEW HIGH SCORE!";
+        }
+        else
+        {
+            highScoreText.text = "HIGH SCORE: " + HighScore.GetHighScore();
+        }
     }
 }
