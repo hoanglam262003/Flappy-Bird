@@ -33,6 +33,9 @@ public class GameAssets : MonoBehaviour
     public Transform pipeHeadPrefab;
     public Transform pipeBodyPrefab;
     public Transform ground;
+    public Transform cloud_1;
+    public Transform cloud_2;
+    public Transform cloud_3;
 
     public SoundAudioClip[] soundAudioClipArray;
 

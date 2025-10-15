@@ -4,7 +4,7 @@ using System;
 
 public class Bird : MonoBehaviour
 {
-    private const float JUMP_FORCE = 100f;
+    private const float JUMP_FORCE = 90f;
     private Rigidbody2D rb;
     private static Bird instance;
     private State state;
