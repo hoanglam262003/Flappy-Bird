@@ -11,6 +11,9 @@ public class Level : MonoBehaviour
     private const float PIPE_DESTROY_X_POSITION = -100f;
     private const float PIPE_SPAWN_X_POSITION = 100f;
     private const float GROUND_DESTROY_X_POSITION = -200f;
+    private const float CLOUD_DESTROY_X_POSITION = -160f;
+    private const float CLOUD_SPAWN_X_POSITION = 160f;
+    private const float CLOUD_SPAWN_Y_POSITION = 30f;
     private const float BIRD_X_POSITION = 0f;
 
     private static Level instance;
@@ -21,6 +24,8 @@ public class Level : MonoBehaviour
     }
 
     private List<Transform> groundList;
+    private List<Transform> cloudList;
+    private float cloudSpawnTime;
     private List<Pipe> pipeList;
     private int pipesPassedCount;
     private float pipeSpawnTime;
@@ -47,6 +52,7 @@ public class Level : MonoBehaviour
     {
         instance = this;
         SpawnInitialGround();
+        SpawnInitialClouds();
         pipeList = new List<Pipe>();
         SetDifficulty(Difficulty.Easy);
         state = State.WaitingToStart;
@@ -78,6 +84,51 @@ public class Level : MonoBehaviour
             PipeMovement();
             pipeSpawn();
             Ground();
+            Cloud();
+        }
+    }
+
+    private void SpawnInitialClouds()
+    {
+        cloudList = new List<Transform>();
+        Transform cloud;
+        cloud = Instantiate(GetCloudPrefabTransform(), new Vector3(0, CLOUD_SPAWN_Y_POSITION, 0), Quaternion.identity);
+        cloudList.Add(cloud);
+    }
+
+    private Transform GetCloudPrefabTransform()
+    {
+        switch (Random.Range(0, 3))
+        {
+            default:
+            case 0: return GameAssets.GetInstance().cloud_1;
+            case 1: return GameAssets.GetInstance().cloud_2;
+            case 2: return GameAssets.GetInstance().cloud_3;
+        }
+    }
+
+    private void Cloud()
+    {
+        cloudSpawnTime -= Time.deltaTime;
+        if (cloudSpawnTime < 0)
+        {
+            float cloudSpawnTimeMax = 6f;
+            cloudSpawnTime = cloudSpawnTimeMax;
+            Transform cloud = Instantiate(GetCloudPrefabTransform(), new Vector3(CLOUD_SPAWN_X_POSITION, CLOUD_SPAWN_Y_POSITION, 0), Quaternion.identity);
+            cloudList.Add(cloud);
+        }
+        for (int i = 0; i < cloudList.Count; i++)
+        {
+            Transform cloud = cloudList[i];
+            cloud.position += new Vector3(-1f, 0f, 0f) * PIPE_MOVE_SPEED * Time.deltaTime * 0.7f;
+
+            if (cloud.position.x < CLOUD_DESTROY_X_POSITION)
+            {
+                Destroy(cloud.gameObject);
+                cloudList.RemoveAt(i);
+                i--;
+            }
+
         }
     }
 
@@ -113,7 +164,7 @@ public class Level : MonoBehaviour
                 }
                 float groundWidth = 183f;
                 ground.position = new Vector3(rightMostXPosition + groundWidth, ground.position.y, ground.position.z);
-            }          
+            }
         }
     }
 
