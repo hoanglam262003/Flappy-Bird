@@ -8,6 +8,8 @@ public class Bird : MonoBehaviour
     private Rigidbody2D rb;
     private static Bird instance;
     private State state;
+    private Animator animator;
+
     private enum State
     {
         WaitingToStart,
@@ -26,6 +28,7 @@ public class Bird : MonoBehaviour
     {
         instance = this;
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
         rb.bodyType = RigidbodyType2D.Static;
         state = State.WaitingToStart;
     }
@@ -34,6 +37,7 @@ public class Bird : MonoBehaviour
         switch (state)
         {
             case State.WaitingToStart:
+                animator.SetBool("IsFlapping", false);
                 if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 {
                     state = State.Playing;
@@ -43,12 +47,15 @@ public class Bird : MonoBehaviour
                 }
                 break;
             case State.Playing:
+                animator.SetBool("IsFlapping", true);
                 if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 {
                     Jump();
                 }
+                transform.eulerAngles = new Vector3(0, 0, rb.linearVelocity.y * 0.2f);
                 break;
             case State.Dead:
+                animator.SetBool("IsFlapping", false);
                 break;
         }
     }

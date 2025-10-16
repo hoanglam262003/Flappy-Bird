@@ -29,6 +29,7 @@ public class GameOverWindow : MonoBehaviour
         });
         mainMenuButton.AddButtonSounds();
         Hide();
+        transform.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
     private void Hide()

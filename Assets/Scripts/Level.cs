@@ -207,7 +207,7 @@ public class Level : MonoBehaviour
                 break;
             case Difficulty.Asian:
                 gapSize = 20f;
-                pipeSpawnTimeMax = 1.2f;
+                pipeSpawnTimeMax = 1.0f;
                 break;
         }
     }
